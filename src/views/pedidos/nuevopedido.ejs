@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Título de la página | SGER</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">SGER</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <% if (user) { %>
+                        <% if (user.rol==="admin" ) { %>
+                            <li class="nav-item"><a class="nav-link" href="/usuarios">Usuarios</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/repartidores">Repartidores</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/pedidos">Pedidos</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/asignacion">Asignación</a></li>
+                            <% } else if (user.rol==="operador" ) { %>
+                                <li class="nav-item"><a class="nav-link" href="/repartidores">Repartidores</a></li>
+                                <li class="nav-item"><a class="nav-link" href="/pedidos">Pedidos</a></li>
+                                <% } else if (user.rol==="repartidor" ) { %>
+                                    <li class="nav-item"><a class="nav-link" href="/pedidos">Mis Pedidos</a></li>
+                                    <% } %>
+                                        <li class="nav-item"><a class="nav-link" href="/perfil">Perfil</a></li>
+                                        <li class="nav-item"><a class="nav-link" href="/auth/logout">Cerrar sesión</a>
+                                        </li>
+                                        <% } else { %>
+                                            <li class="nav-item"><a class="nav-link" href="/auth/google">Iniciar
+                                                    sesión</a></li>
+                                            <% } %>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+
+        <h2>Crear Nuevo Pedido</h2>
+        <form action="/pedidos/nuevo" method="POST">
+            <div class="mb-3">
+                <label for="clienteNombre" class="form-label">Nombre del Cliente</label>
+                <input type="text" class="form-control" id="clienteNombre" name="cliente[nombre]" required>
+            </div>
+            <div class="mb-3">
+                <label for="clienteTelefono" class="form-label">Teléfono</label>
+                <input type="text" class="form-control" id="clienteTelefono" name="cliente[telefono]" required>
+            </div>
+            <div class="mb-3">
+                <label for="direccionCalle" class="form-label">Calle</label>
+                <input type="text" class="form-control" id="direccionCalle" name="direccion[calle]" required>
+            </div>
+            <div class="mb-3">
+                <label for="direccionLocalidad" class="form-label">Localidad</label>
+                <input type="text" class="form-control" id="direccionLocalidad" name="direccion[localidad]" required>
+            </div>
+            <div class="mb-3">
+                <label for="zona" class="form-label">Zona</label>
+                <select class="form-select" id="zona" name="zona">
+                    <% zonas.forEach(z=> { %>
+                        <option value="<%= z.nombre %>">
+                            <%= z.nombre %>
+                        </option>
+                        <% }) %>
+                </select>
+            </div>
+            <h5>Detalles del Pedido</h5>
+            <div id="detallesContainer">
+                <div class="mb-3 row">
+                    <div class="col">
+                        <input type="text" class="form-control" placeholder="Producto" name="detalles[0][producto]"
+                            required>
+                    </div>
+                    <div class="col">
+                        <input type="number" class="form-control" placeholder="Cantidad" name="detalles[0][cantidad]"
+                            required>
+                    </div>
+                    <div class="col">
+                        <input type="number" class="form-control" placeholder="Precio" name="detalles[0][precio]"
+                            required>
+                    </div>
+                </div>
+            </div>
+            <button type="button" class="btn btn-secondary mb-3" onclick="agregarDetalle()">Agregar otro
+                producto</button>
+            <button type="submit" class="btn btn-primary">Crear Pedido</button>
+        </form>
+
+        <script>
+            let contador = 1;
+            function agregarDetalle() {
+                const container = document.getElementById('detallesContainer');
+                const row = document.createElement('div');
+                row.classList.add('mb-3', 'row');
+                row.innerHTML = `
+        <div class="col">
+            <input type="text" class="form-control" placeholder="Producto" name="detalles[${contador}][producto]" required>
+        </div>
+        <div class="col">
+            <input type="number" class="form-control" placeholder="Cantidad" name="detalles[${contador}][cantidad]" required>
+        </div>
+        <div class="col">
+            <input type="number" class="form-control" placeholder="Precio" name="detalles[${contador}][precio]" required>
+        </div>
+    `;
+                container.appendChild(row);
+                contador++;
+            }
+        </script>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-light text-center py-3 mt-5">
+        <p class="mb-0">&copy; 2025 SGER. Todos los derechos reservados.</p>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
