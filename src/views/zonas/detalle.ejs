@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Detalle Zona | SGER</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <style>
+        body {
+            margin: 0;
+            font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
+            background: #f6f7fb;
+        }
+
+        .layout {
+            display: grid;
+            grid-template-columns: 240px 1fr;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            background: #1f2937;
+            color: #fff;
+            padding: 16px;
+        }
+
+        .content {
+            padding: 24px;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .topbar .title {
+            font-size: 22px;
+            font-weight: 600;
+            color: #111827;
+        }
+
+        .card {
+            background: #fff;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+        }
+
+        .item {
+            margin-bottom: 8px;
+            color: #374151;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="layout">
+        <aside class="sidebar">
+            <h2>Menú</h2>
+            <a href="/dashboard">Dashboard</a>
+            <a href="/usuarios">Usuarios</a>
+            <a href="/repartidores">Repartidores</a>
+            <a href="/pedidos">Pedidos</a>
+            <a href="/zonas">Zonas</a>
+            <a href="/asignacion">Asignación</a>
+            <a href="/auth/perfil">Perfil</a>
+            <a href="/auth/logout">Salir</a>
+        </aside>
+        <main class="content">
+            <div class="topbar">
+                <div class="title">Detalle de Zona</div>
+                <div><a class="btn" href="/zonas">Volver</a></div>
+            </div>
+            <div class="card">
+                <div class="item"><strong>Nombre:</strong>
+                    <%= zona.nombre %>
+                </div>
+                <div class="item"><strong>Código:</strong>
+                    <%= zona.codigo %>
+                </div>
+                <div class="item"><strong>Descripción:</strong>
+                    <%= zona.descripcion || '-' %>
+                </div>
+                <div class="item"><strong>Localidades:</strong>
+                    <%= (zona.localidades || []).join(', ') %></div>
+        <div class="item"><strong>Activa:</strong> <%= zona.activa ? ' Sí' : 'No' %>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+
+</html>

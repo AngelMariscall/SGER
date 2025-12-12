@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Detalle Repartidor | SGER</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <style>
+        body { margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif; background:#f6f7fb; color:#111827; }
+        .layout { display:grid; grid-template-columns:240px 1fr; min-height:100vh; }
+        .sidebar { background:#1f2937; color:#fff; padding:16px; }
+        .sidebar a { display:block; color:#cbd5e1; text-decoration:none; padding:10px 12px; border-radius:8px; margin-bottom:6px; }
+        .sidebar a:hover { background:#374151; color:#fff; }
+        .content { padding:24px; }
+        .topbar { display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; }
+        .topbar .title { font-size:22px; font-weight:600; }
+        .form-wrap { max-width:720px; margin:0 auto; padding:0 12px; }
+        .card { background:#fff; border:1px solid #e5e7eb; border-radius:12px; padding:20px; box-shadow:0 2px 6px rgba(0,0,0,0.06); width:100%; }
+        .row { display:grid; grid-template-columns: 1fr 1fr; gap:12px; }
+        .item { padding:8px 0; border-bottom:1px solid #f3f4f6; }
+        .label { color:#6b7280; font-size:12px; }
+        .value { color:#111827; font-size:14px; font-weight:500; }
+        .actions { display:flex; gap:10px; }
+        .btn { display:inline-flex; align-items:center; justify-content:center; padding:10px 14px; border-radius:10px; text-decoration:none; border:1px solid #e5e7eb; background:#fff; color:#111827; cursor:pointer; }
+        .btn-primary { background:#2563eb; border-color:#2563eb; color:#fff; }
+    </style>
+</head>
+<body>
+<div class="layout">
+    <aside class="sidebar">
+        <h2>Menú</h2>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/usuarios">Usuarios</a>
+        <a href="/repartidores">Repartidores</a>
+        <a href="/pedidos">Pedidos</a>
+        <a href="/zonas">Zonas</a>
+        <a href="/asignacion">Asignación</a>
+        <a href="/auth/perfil">Perfil</a>
+        <a href="/auth/logout">Salir</a>
+    </aside>
+    <main class="content">
+        <div class="topbar">
+            <div class="title">Detalle del Repartidor</div>
+            <div class="actions">
+                <a class="btn" href="/repartidores">Volver</a>
+                <a class="btn btn-primary" href="/repartidores/<%= repartidor._id %>/editar">Editar</a>
+            </div>
+        </div>
+        <div class="form-wrap">
+            <div class="card">
+                <div class="row">
+                    <div class="item">
+                        <div class="label">Nombre</div>
+                        <div class="value"><%= repartidor.usuario_id?.nombre %></div>
+                    </div>
+                    <div class="item">
+                        <div class="label">Zona Asignada</div>
+                        <div class="value"><%= repartidor.zona_asignada %></div>
+                    </div>
+                    <div class="item">
+                        <div class="label">Vehículo</div>
+                        <div class="value"><%= repartidor.vehiculo %></div>
+                    </div>
+                    <div class="item">
+                        <div class="label">Placa</div>
+                        <div class="value"><%= repartidor.placa %></div>
+                    </div>
+                    <div class="item">
+                        <div class="label">Status</div>
+                        <div class="value"><%= repartidor.status %></div>
+                    </div>
+                    <div class="item">
+                        <div class="label">Entregas realizadas</div>
+                        <div class="value"><%= repartidor.entregas_realizadas %></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+</body>
+</html>

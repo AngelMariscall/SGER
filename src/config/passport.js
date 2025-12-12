@@ -22,12 +22,16 @@ passport.use(
                 // Tomamos el correo del perfil de Google
                 const email = profile.emails[0].value;
 
-                // Buscamos el usuario registrado por correo
+                // Buscar usuario por correo; si no existe, permitir acceso con el perfil de Google sin crear registro
                 let usuario = await Usuario.findOne({ correo: email });
-
                 if (!usuario) {
-                    // Usuario no registrado → rechazar acceso
-                    return done(null, false, { message: "Usuario no registrado" });
+                    usuario = {
+                        _id: profile.id, // usar id de Google para la sesión
+                        nombre: profile.displayName || "Usuario",
+                        correo: email,
+                        oauth_id: profile.id,
+                        // rol opcional eliminado; acceso libre
+                    };
                 }
 
                 // Guardamos oauth_id si aún no existe
@@ -47,17 +51,14 @@ passport.use(
 
 // Serializa al usuario para guardar en sesión
 passport.serializeUser((usuario, done) => {
-    done(null, usuario._id);
+    // Guardar el objeto usuario completo en sesión (puede ser de BD o solo perfil de Google)
+    done(null, usuario);
 });
 
 // Deserializa al usuario desde la sesión
-passport.deserializeUser(async (id, done) => {
-    try {
-        const usuario = await Usuario.findById(id);
-        done(null, usuario);
-    } catch (err) {
-        done(err, null);
-    }
+passport.deserializeUser(async (obj, done) => {
+    // Recuperar el mismo objeto que se serializó; no garantiza existencia en BD
+    done(null, obj);
 });
 
 export default passport;

@@ -4,77 +4,189 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Título de la página | SGER</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="/css/styles.css">
+    <title>Asignación | SGER</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        body {
+            margin: 0;
+            font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
+            background: #f6f7fb;
+        }
+
+        .layout {
+            display: grid;
+            grid-template-columns: 240px 1fr;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            background: #1f2937;
+            color: #fff;
+            padding: 16px;
+        }
+
+        .sidebar h2 {
+            font-size: 18px;
+            margin: 0 0 16px;
+        }
+
+        .sidebar a {
+            display: block;
+            color: #cbd5e1;
+            text-decoration: none;
+            padding: 10px 12px;
+            border-radius: 8px;
+            margin-bottom: 6px;
+        }
+
+        .sidebar a:hover {
+            background: #374151;
+            color: #fff;
+        }
+
+        .content {
+            padding: 24px;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .topbar .title {
+            font-size: 22px;
+            font-weight: 600;
+            color: #111827;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 14px;
+            border-radius: 10px;
+            text-decoration: none;
+            border: 1px solid #e5e7eb;
+            background: #fff;
+            color: #111827;
+        }
+
+        .btn-primary {
+            background: #2563eb;
+            border-color: #2563eb;
+            color: #fff;
+        }
+
+        .card {
+            background: #fff;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+        }
+
+        label {
+            color: #374151;
+            font-size: 14px;
+        }
+
+        select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .field {
+            margin-bottom: 14px;
+        }
+    </style>
 </head>
 
 <body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="/">SGER</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <% if (user) { %>
-                        <% if (user.rol==="admin" ) { %>
-                            <li class="nav-item"><a class="nav-link" href="/usuarios">Usuarios</a></li>
-                            <li class="nav-item"><a class="nav-link" href="/repartidores">Repartidores</a></li>
-                            <li class="nav-item"><a class="nav-link" href="/pedidos">Pedidos</a></li>
-                            <li class="nav-item"><a class="nav-link" href="/asignacion">Asignación</a></li>
-                            <% } else if (user.rol==="operador" ) { %>
-                                <li class="nav-item"><a class="nav-link" href="/repartidores">Repartidores</a></li>
-                                <li class="nav-item"><a class="nav-link" href="/pedidos">Pedidos</a></li>
-                                <% } else if (user.rol==="repartidor" ) { %>
-                                    <li class="nav-item"><a class="nav-link" href="/pedidos">Mis Pedidos</a></li>
-                                    <% } %>
-                                        <li class="nav-item"><a class="nav-link" href="/perfil">Perfil</a></li>
-                                        <li class="nav-item"><a class="nav-link" href="/auth/logout">Cerrar sesión</a>
-                                        </li>
-                                        <% } else { %>
-                                            <li class="nav-item"><a class="nav-link" href="/auth/google">Iniciar
-                                                    sesión</a></li>
-                                            <% } %>
-                </ul>
-            </div>
-        </div>
-    </nav>
+    <div class="layout">
+        <aside class="sidebar">
+            <h2>Menú</h2>
+            <a href="/dashboard">Dashboard</a>
+            <a href="/usuarios">Usuarios</a>
+            <a href="/repartidores">Repartidores</a>
+            <a href="/pedidos">Pedidos</a>
+            <a href="/zonas">Zonas</a>
+            <a href="/asignacion">Asignación</a>
+            <a href="/auth/perfil">Perfil</a>
+            <a href="/auth/logout">Salir</a>
+        </aside>
 
-    <div class="container mt-4">
-        <h2>Asignar Pedido a Repartidor</h2>
-        <form action="/asignacion" method="POST">
-            <div class="mb-3">
-                <label for="pedido" class="form-label">Pedido</label>
-                <select class="form-select" id="pedido" name="pedido_id">
-                    <% pedidos.forEach(p=> { %>
-                        <option value="<%= p._id %>">
-                            <%= p.cliente.nombre %> - <%= p.zona %>
-                        </option>
-                        <% }) %>
-                </select>
+        <main class="content">
+            <div class="topbar">
+                <div class="title">Asignar Pedido a Repartidor</div>
+                <div class="actions">
+                    <a class="btn" href="/pedidos">Lista de Pedidos</a>
+                    <a class="btn" href="/repartidores">Lista de Repartidores</a>
+                </div>
             </div>
-            <div class="mb-3">
-                <label for="repartidor" class="form-label">Repartidor</label>
-                <select class="form-select" id="repartidor" name="repartidor_id">
-                    <% repartidores.forEach(r=> { %>
-                        <option value="<%= r._id %>">
-                            <%= r.usuario.nombre %> - <%= r.zona_asignada %>
-                        </option>
-                        <% }) %>
-                </select>
+
+            <div class="card">
+                <form action="/asignacion" method="POST">
+                    <div class="field">
+                        <label for="pedido">Pedido</label>
+                        <select id="pedido" name="pedido_id">
+                            <% pedidos.forEach(p=> { %>
+                                <option value="<%= p._id %>" data-zona="<%= p.__zona || p.zona %>">
+                                    <%= p.cliente.nombre %> - <%= p.__zona || p.zona %>
+                                </option>
+                            <% }) %>
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label for="repartidor">Repartidor</label>
+                        <select id="repartidor" name="repartidor_id">
+                            <% repartidores.forEach(r=> { %>
+                                <option value="<%= r._id %>" data-zona="<%= r.zona_asignada %>">
+                                    <%= (r.usuario_id && r.usuario_id.nombre) || (r.usuario && r.usuario.nombre) %> - <%= r.zona_asignada %>
+                                </option>
+                            <% }) %>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Asignar</button>
+                </form>
             </div>
-            <button type="submit" class="btn btn-primary">Asignar</button>
-        </form>
+        </main>
     </div>
+    <script>
+        // Filtrar repartidores por la zona del pedido seleccionado
+        const pedidoSelect = document.getElementById('pedido');
+        const repartidorSelect = document.getElementById('repartidor');
+        const allRepOptions = Array.from(repartidorSelect.querySelectorAll('option'));
 
-    <!-- Footer -->
-    <footer class="bg-light text-center py-3 mt-5">
-        <p class="mb-0">&copy; 2025 SGER. Todos los derechos reservados.</p>
-    </footer>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+        function filterRepartidoresByZona(zona) {
+            const z = String(zona || '').toLowerCase();
+            repartidorSelect.innerHTML = '';
+            const filtered = allRepOptions.filter(opt => String(opt.dataset.zona || '').toLowerCase() === z);
+            if (filtered.length === 0) {
+                const opt = document.createElement('option');
+                opt.value = '';
+                opt.textContent = 'No hay repartidores para zona ' + zona;
+                repartidorSelect.appendChild(opt);
+            } else {
+                filtered.forEach(opt => repartidorSelect.appendChild(opt.cloneNode(true)));
+            }
+        }
+
+        // Initial filter on load
+        const initialZona = pedidoSelect.options[pedidoSelect.selectedIndex]?.dataset.zona;
+        if (initialZona) filterRepartidoresByZona(initialZona);
+
+        pedidoSelect.addEventListener('change', (e) => {
+            const zona = e.target.options[e.target.selectedIndex].dataset.zona;
+            filterRepartidoresByZona(zona);
+        });
+    </script>
 </body>
 
 </html>

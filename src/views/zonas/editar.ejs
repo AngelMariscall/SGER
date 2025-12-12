@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Editar Zona | SGER</title>
+  <link rel="stylesheet" href="/css/style.css" />
+  <style>
+    body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif; background: #f6f7fb; }
+    .layout { display: grid; grid-template-columns: 240px 1fr; min-height: 100vh; }
+    .sidebar { background: #1f2937; color: #fff; padding: 16px; }
+    .content { padding: 24px; }
+    .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+    .topbar .title { font-size: 22px; font-weight: 600; color: #111827; }
+    .card { background: #fff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 16px; box-shadow: 0 1px 2px rgba(0,0,0,0.04); }
+    .field { margin-bottom: 14px; }
+    label { color: #374151; font-size: 14px; }
+    input, textarea { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #e5e7eb; }
+    .btn { display: inline-block; padding: 10px 14px; border-radius: 10px; text-decoration: none; border: 1px solid #e5e7eb; background: #fff; color: #111827; }
+    .btn-primary { background: #2563eb; border-color: #2563eb; color: #fff; }
+    .inline { display: grid; grid-template-columns: 1fr auto; gap: 10px; }
+    .items .chip { display:inline-block; margin:4px; padding:6px 10px; border:1px solid #e5e7eb; border-radius:999px; background:#fff; }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <h2>Menú</h2>
+      <a href="/dashboard">Dashboard</a>
+      <a href="/usuarios">Usuarios</a>
+      <a href="/repartidores">Repartidores</a>
+      <a href="/pedidos">Pedidos</a>
+      <a href="/zonas">Zonas</a>
+      <a href="/asignacion">Asignación</a>
+      <a href="/auth/perfil">Perfil</a>
+      <a href="/auth/logout">Salir</a>
+    </aside>
+    <main class="content">
+      <div class="topbar">
+        <div class="title">Editar Zona</div>
+        <div><a class="btn" href="/zonas">Cancelar</a></div>
+      </div>
+      <div class="card">
+        <form action="/zonas/<%= zona._id %>/editar" method="POST">
+          <div class="field">
+            <label for="nombre">Nombre</label>
+            <input type="text" id="nombre" name="nombre" value="<%= zona.nombre %>" required />
+          </div>
+          <div class="field">
+            <label for="codigo">Código</label>
+            <input type="text" id="codigo" name="codigo" value="<%= zona.codigo %>" required />
+          </div>
+          <div class="field">
+            <label for="descripcion">Descripción</label>
+            <textarea id="descripcion" name="descripcion"><%= zona.descripcion || '' %></textarea>
+          </div>
+          <div class="field">
+            <label>Localidades</label>
+            <div class="inline">
+              <input type="text" id="locInput" placeholder="Agregar localidad" />
+              <button type="button" class="btn" onclick="addLoc()">Agregar</button>
+            </div>
+            <div class="items" id="locList"></div>
+            <div id="hiddenLocs"></div>
+          </div>
+          <div class="field" style="display:flex; align-items:center; gap:8px;">
+            <input type="checkbox" id="activa" name="activa" <%= zona.activa ? 'checked' : '' %> />
+            <label for="activa">Activa</label>
+          </div>
+          <button type="submit" class="btn btn-primary">Guardar cambios</button>
+        </form>
+      </div>
+    </main>
+  </div>
+
+  <script>
+  const locs = JSON.parse('<%- JSON.stringify(zona.localidades || []) %>');
+    const locInput = document.getElementById('locInput');
+    const locList = document.getElementById('locList');
+    const hiddenLocs = document.getElementById('hiddenLocs');
+    function renderLocs() {
+      locList.innerHTML = '';
+      hiddenLocs.innerHTML = '';
+      locs.forEach((l, i) => {
+        const chip = document.createElement('span'); chip.className='chip'; chip.textContent=l;
+        const btn = document.createElement('button'); btn.className='btn'; btn.textContent='x'; btn.style.marginLeft='6px'; btn.onclick=()=>{ locs.splice(i,1); renderLocs(); };
+        const wrap = document.createElement('div'); wrap.style.display='inline-flex'; wrap.appendChild(chip); wrap.appendChild(btn);
+        locList.appendChild(wrap);
+        const hid = document.createElement('input'); hid.type='hidden'; hid.name='localidades'; hid.value=l; hiddenLocs.appendChild(hid);
+      });
+    }
+    function addLoc() { const v = locInput.value.trim(); if(!v) return; locs.push(v); locInput.value=''; renderLocs(); }
+    renderLocs();
+  </script>
+</body>
+</html>

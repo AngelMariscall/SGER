@@ -22,6 +22,8 @@ const pedidoSchema = new mongoose.Schema({
     total: { type: Number, required: true },
     estatus: { type: String, enum: ["pendiente", "asignado", "en_camino", "entregado", "cancelado"], default: "pendiente" },
     repartidor_id: { type: mongoose.Schema.Types.ObjectId, ref: "Repartidor", default: null },
+    // Campo denormalizado para mostrar el nombre del repartidor sin join
+    repartidor_nombre: { type: String, default: "" },
     fecha_creacion: { type: Date, default: Date.now },
     fecha_asignacion: { type: Date, default: null },
     fecha_entrega: { type: Date, default: null }

@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <style>
+        body {
+            margin: 0;
+            font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
+            background: #f6f7fb;
+        }
+
+        .layout {
+            display: grid;
+            grid-template-columns: 240px 1fr;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            background: #1f2937;
+            color: #fff;
+            padding: 16px;
+        }
+
+        .sidebar h2 {
+            font-size: 18px;
+            margin: 0 0 16px;
+        }
+
+        .sidebar a {
+            display: block;
+            color: #cbd5e1;
+            text-decoration: none;
+            padding: 10px 12px;
+            border-radius: 8px;
+            margin-bottom: 6px;
+        }
+
+        .sidebar a:hover {
+            background: #374151;
+            color: #fff;
+        }
+
+        .content {
+            padding: 24px;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .topbar .title {
+            font-size: 22px;
+            font-weight: 600;
+            color: #111827;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 16px;
+        }
+
+        .card {
+            background: #fff;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+        }
+
+        .card h3 {
+            margin: 0;
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .card .value {
+            margin-top: 8px;
+            font-size: 28px;
+            font-weight: 700;
+            color: #111827;
+        }
+
+        .links {
+            margin-top: 24px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 12px;
+        }
+
+        .link {
+            background: #fff;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            padding: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            text-decoration: none;
+            color: #111827;
+        }
+
+        .link:hover {
+            border-color: #d1d5db;
+        }
+
+        .user {
+            color: #374151;
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="layout">
+        <aside class="sidebar">
+            <h2>Menú</h2>
+            <a href="/dashboard">Dashboard</a>
+            <a href="/usuarios">Usuarios</a>
+            <a href="/repartidores">Repartidores</a>
+            <a href="/pedidos">Pedidos</a>
+            <a href="/zonas">Zonas</a>
+            <a href="/asignacion">Asignación</a>
+            <a href="/auth/perfil">Perfil</a>
+            <a href="/auth/logout">Salir</a>
+        </aside>
+
+        <main class="content">
+            <div class="topbar">
+                <div class="title">Panel principal</div>
+                <div class="user">Usuario: <strong>
+                        <%= user ? (user.displayName || user.nombre || user.email) : 'Invitado' %>
+                    </strong></div>
+            </div>
+
+            <section class="cards">
+                <div class="card">
+                    <h3>Total de usuarios</h3>
+                    <div class="value">
+                        <%= metrics.totalUsuarios %>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3>Total de repartidores</h3>
+                    <div class="value">
+                        <%= metrics.totalRepartidores %>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3>Total de pedidos</h3>
+                    <div class="value">
+                        <%= metrics.totalPedidos %>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3>Pedidos pendientes</h3>
+                    <div class="value">
+                        <%= metrics.pedidosPendientes %>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3>Pedidos asignados</h3>
+                    <div class="value">
+                        <%= metrics.pedidosAsignados %>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3>Pedidos sin asignar</h3>
+                    <div class="value">
+                        <%= metrics.pedidosSinAsignar %>
+                    </div>
+                </div>
+            </section>
+
+            <section class="links">
+                <a class="link" href="/usuarios">
+                    <span>Ver lista de usuarios</span>
+                    <span>→</span>
+                </a>
+                <a class="link" href="/usuarios/nuevo">
+                    <span>Crear nuevo usuario</span>
+                    <span>＋</span>
+                </a>
+                <a class="link" href="/repartidores">
+                    <span>Ver repartidores</span>
+                    <span>→</span>
+                </a>
+                <a class="link" href="/pedidos">
+                    <span>Ver pedidos</span>
+                    <span>→</span>
+                </a>
+                <a class="link" href="/pedidos/nuevo">
+                    <span>Nuevo pedido</span>
+                    <span>＋</span>
+                </a>
+                <a class="link" href="/asignacion">
+                    <span>Asignar pedidos</span>
+                    <span>→</span>
+                </a>
+            </section>
+        </main>
+    </div>
+</body>
+
+</html>

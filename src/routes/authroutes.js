@@ -1,11 +1,17 @@
 import express from "express";
 import passport from "../config/passport.js";
+import { isAuthenticated } from "../middlewares/auth.js";
 
 const router = express.Router();
 
 // Página de login
 router.get("/login", (req, res) => {
     res.render("auth/login", { user: req.user });
+});
+
+// Página de perfil
+router.get("/perfil", isAuthenticated, (req, res) => {
+    res.render("auth/perfil", { user: req.user });
 });
 
 // Login con Google
@@ -18,11 +24,9 @@ router.get(
 router.get(
     "/google/callback",
     passport.authenticate("google", { failureRedirect: "/auth/failure" }),
-    (req, res) => {
-        // Redirige según rol
-        if (req.user.rol === "admin") res.redirect("/usuarios");
-        else if (req.user.rol === "operador") res.redirect("/pedidos");
-        else res.redirect("/perfil");
+        (req, res) => {
+            // Éxito: redirigir al dashboard con métricas
+            res.redirect("/dashboard");
     }
 );
 

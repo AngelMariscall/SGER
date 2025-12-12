@@ -16,10 +16,8 @@ export const connectZonaDB = async (zona) => {
         if (!mongoUri) throw new Error(`No existe URI para la zona: ${zona}`);
 
         // Conectamos
-        const conexion = await mongoose.createConnection(mongoUri, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-        });
+        // Conectar sin opciones deprecated; Mongoose actual gestiona los defaults
+        const conexion = await mongoose.createConnection(mongoUri);
 
         // Guardamos la conexión para reutilizarla
         conexiones[zona] = conexion;

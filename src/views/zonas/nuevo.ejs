@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nueva Zona | SGER</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
+            background: #f6f7fb;
+            color: #111827;
+        }
+
+        .layout {
+            display: grid;
+            grid-template-columns: 240px 1fr;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            background: #1f2937;
+            color: #fff;
+            padding: 16px;
+        }
+
+        .sidebar a {
+            display: block;
+            color: #cbd5e1;
+            text-decoration: none;
+            padding: 10px 12px;
+            border-radius: 8px;
+            margin-bottom: 6px;
+        }
+
+        .sidebar a:hover {
+            background: #374151;
+            color: #fff;
+        }
+
+        .content {
+            padding: 24px;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .topbar .title {
+            font-size: 22px;
+            font-weight: 600;
+            color: #111827;
+        }
+
+        .form-wrap {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 0 12px;
+        }
+
+        .card {
+            background: #fff;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+            width: 100%;
+        }
+
+        .field {
+            margin-bottom: 16px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            color: #374151;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+            background: #fff;
+            max-width: 100%;
+        }
+
+        textarea {
+            min-height: 90px;
+            resize: vertical;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 14px;
+            border-radius: 10px;
+            text-decoration: none;
+            border: 1px solid #e5e7eb;
+            background: #fff;
+            color: #111827;
+            cursor: pointer;
+            transition: box-shadow 0.15s ease, transform 0.05s ease;
+        }
+
+        .btn:hover {
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+        }
+
+        .btn:active {
+            transform: translateY(1px);
+        }
+
+        .btn-primary {
+            background: #2563eb;
+            border-color: #2563eb;
+            color: #fff;
+        }
+
+        .loc-inline {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        #locInput {
+            flex: 1 1 auto;
+            min-width: 260px;
+        }
+
+        .items {
+            margin-top: 6px;
+        }
+
+        .items .chip {
+            display: inline-flex;
+            align-items: center;
+            margin: 4px;
+            padding: 6px 10px;
+            border: 1px solid #e5e7eb;
+            border-radius: 999px;
+            background: #fff;
+            gap: 6px;
+        }
+
+        .chip .remove {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 22px;
+            height: 22px;
+            border-radius: 999px;
+            border: 1px solid #e5e7eb;
+            background: #f9fafb;
+            color: #6b7280;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="layout">
+        <aside class="sidebar">
+            <h2>Menú</h2>
+            <a href="/dashboard">Dashboard</a>
+            <a href="/usuarios">Usuarios</a>
+            <a href="/repartidores">Repartidores</a>
+            <a href="/pedidos">Pedidos</a>
+            <a href="/zonas">Zonas</a>
+            <a href="/asignacion">Asignación</a>
+            <a href="/auth/perfil">Perfil</a>
+            <a href="/auth/logout">Salir</a>
+        </aside>
+        <main class="content">
+            <div class="topbar">
+                <div class="title">Nueva Zona</div>
+                <div class="actions"><a class="btn" href="/zonas">Volver</a></div>
+            </div>
+            <div class="form-wrap">
+                <div class="card">
+                    <form action="/zonas/nuevo" method="POST">
+                        <div class="field">
+                            <label for="nombre">Nombre</label>
+                            <input type="text" id="nombre" name="nombre" required />
+                        </div>
+                        <div class="field">
+                            <label for="codigo">Código</label>
+                            <input type="text" id="codigo" name="codigo" required />
+                        </div>
+                        <div class="field">
+                            <label for="descripcion">Descripción</label>
+                            <textarea id="descripcion" name="descripcion"></textarea>
+                        </div>
+                        <div class="field">
+                            <label>Localidades</label>
+                            <div class="loc-inline">
+                                <input type="text" id="locInput" placeholder="Agregar localidad" />
+                                <button type="button" class="btn" onclick="addLoc()">Agregar</button>
+                            </div>
+                            <div class="items" id="locList"></div>
+                            <div id="hiddenLocs"></div>
+                        </div>
+                        <div class="field" style="display:flex; align-items:center; gap:8px;">
+                            <input type="checkbox" id="activa" name="activa" checked />
+                            <label for="activa">Activa</label>
+                        </div>
+                        <div class="actions">
+                            <button type="submit" class="btn btn-primary">Crear Zona</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const locs = [];
+        const locInput = document.getElementById('locInput');
+        const locList = document.getElementById('locList');
+        const hiddenLocs = document.getElementById('hiddenLocs');
+        function renderLocs() {
+            locList.innerHTML = '';
+            hiddenLocs.innerHTML = '';
+            locs.forEach((l, i) => {
+                const chip = document.createElement('span');
+                chip.className = 'chip';
+                chip.textContent = l;
+
+                const remove = document.createElement('button');
+                remove.className = 'remove';
+                remove.type = 'button';
+                remove.textContent = '×';
+                remove.title = 'Quitar';
+                remove.onclick = () => { locs.splice(i, 1); renderLocs(); };
+
+                const wrap = document.createElement('span');
+                wrap.className = 'chip';
+                wrap.innerHTML = '';
+                wrap.textContent = '';
+                // build chip content
+                wrap.appendChild(document.createTextNode(l));
+                wrap.appendChild(remove);
+
+                locList.appendChild(wrap);
+
+                const hid = document.createElement('input');
+                hid.type = 'hidden';
+                hid.name = 'localidades';
+                hid.value = l;
+                hiddenLocs.appendChild(hid);
+            });
+        }
+        function addLoc() { const v = locInput.value.trim(); if (!v) return; locs.push(v); locInput.value = ''; renderLocs(); }
+    </script>
+</body>
+
+</html>

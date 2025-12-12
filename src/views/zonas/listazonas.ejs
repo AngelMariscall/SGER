@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zonas | SGER</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif; background: #f6f7fb; }
+    .layout { display: grid; grid-template-columns: 240px 1fr; min-height: 100vh; }
+    .sidebar { background: #1f2937; color: #fff; padding: 16px; }
+    .sidebar a { display: block; color: #cbd5e1; text-decoration: none; padding: 10px 12px; border-radius: 8px; margin-bottom: 6px; }
+    .sidebar a:hover { background: #374151; color: #fff; }
+    .content { padding: 24px; }
+    .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+    .topbar .title { font-size: 22px; font-weight: 600; color: #111827; }
+    .btn { display: inline-block; padding: 10px 14px; border-radius: 10px; text-decoration: none; border: 1px solid #e5e7eb; background: #fff; color: #111827; }
+    .btn-primary { background: #2563eb; border-color: #2563eb; color: #fff; }
+    table { width: 100%; border-collapse: collapse; background: #fff; border: 1px solid #e5e7eb; border-radius: 12px; overflow: hidden; }
+    thead { background: #eff6ff; }
+    th, td { padding: 12px 14px; border-bottom: 1px solid #e5e7eb; color: #111827; }
+    tr:hover { background: #fafafa; }
+    .toast { padding: 10px 14px; border-radius: 8px; margin-bottom: 12px; }
+    .toast-success { background: #ecfdf5; color: #065f46; border: 1px solid #6ee7b7; }
+    .toast-error { background: #fef2f2; color: #7f1d1d; border: 1px solid #fca5a5; }
+    .modal .card { background: #fff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 16px; box-shadow: 0 2px 4px rgba(0,0,0,0.06); }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <h2>Menú</h2>
+      <a href="/dashboard">Dashboard</a>
+      <a href="/usuarios">Usuarios</a>
+      <a href="/repartidores">Repartidores</a>
+      <a href="/pedidos">Pedidos</a>
+      <a href="/zonas">Zonas</a>
+      <a href="/asignacion">Asignación</a>
+      <a href="/auth/perfil">Perfil</a>
+      <a href="/auth/logout">Salir</a>
+    </aside>
+
+    <main class="content">
+      <div class="topbar">
+        <div class="title">Zonas</div>
+        <div class="actions">
+          <a class="btn btn-primary" href="/zonas/nuevo">Nueva Zona</a>
+        </div>
+      </div>
+
+      <% if (typeof msg !== 'undefined' && msg) { %>
+      <div id="toast" class="toast <%= type === 'success' ? 'toast-success' : 'toast-error' %>"><%= msg %></div>
+      <% } %>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Código</th>
+            <th>Localidades</th>
+            <th>Activa</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% zonas.forEach(z=> { %>
+            <tr>
+              <td><%= z.nombre %></td>
+              <td><%= z.codigo %></td>
+              <td><%= (z.localidades || []).join(', ') %></td>
+              <td><%= z.activa ? 'Sí' : 'No' %></td>
+              <td>
+                <a class="btn" href="/zonas/<%= z._id %>">Ver</a>
+                <a class="btn" href="/zonas/<%= z._id %>/editar">Editar</a>
+                <button type="button" class="btn" onclick="confirmDelete('<%= z._id %>')">Eliminar</button>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+
+      <div id="confirmModal" class="modal" style="display:none; position:fixed; inset:0; background: rgba(0,0,0,0.25); align-items:center; justify-content:center;">
+        <div class="card" style="max-width:420px;">
+          <div style="font-weight:600; margin-bottom:8px;">Confirmar eliminación</div>
+          <div class="muted" style="margin-bottom:12px;">¿Seguro que deseas eliminar esta zona?</div>
+          <div style="display:flex; gap:8px; justify-content:flex-end;">
+            <button class="btn" onclick="closeModal()">Cancelar</button>
+            <form id="deleteForm" method="POST">
+              <button type="submit" class="btn btn-primary">Eliminar</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const toast = document.getElementById('toast');
+    if (toast) setTimeout(()=> toast.style.display='none', 2500);
+    const modal = document.getElementById('confirmModal');
+    const deleteForm = document.getElementById('deleteForm');
+    function confirmDelete(id) { deleteForm.action = `/zonas/${id}/eliminar`; modal.style.display='flex'; }
+    function closeModal() { modal.style.display='none'; }
+  </script>
+</body>
+</html>

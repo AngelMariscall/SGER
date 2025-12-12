@@ -9,8 +9,13 @@ import usuarioRoutes from "./src/routes/usuarioroutes.js";
 import repartidorRoutes from "./src/routes/repartidorroutes.js";
 import pedidoRoutes from "./src/routes/pedidoroutes.js";
 import asignacionRoutes from "./src/routes/asignacionroutes.js";
+import zonasRoutes from "./src/routes/zonasroutes.js";
 import path from "path";
 import { fileURLToPath } from 'url';
+import Usuario from "./src/models/usuario.js";
+import Pedido from "./src/models/pedido.js";
+import Repartidor from "./src/models/repartidor.js";
+import { isAuthenticated } from "./src/middlewares/auth.js";
 
 
 console.log("Prueba dotenv:", process.env.GOOGLE_CLIENT_ID);
@@ -55,7 +60,36 @@ app.use("/usuarios", usuarioRoutes);
 app.use("/repartidores", repartidorRoutes);
 app.use("/pedidos", pedidoRoutes);
 app.use("/asignacion", asignacionRoutes);
+app.use("/zonas", zonasRoutes);
 
+// Dashboard con métricas
+app.get("/dashboard", isAuthenticated, async (req, res) => {
+    try {
+        const [totalUsuarios, totalRepartidores, totalPedidos, pedidosPendientes, pedidosAsignados, pedidosSinAsignar] = await Promise.all([
+            Usuario.countDocuments({}),
+            Repartidor.countDocuments({}),
+            Pedido.countDocuments({}),
+            Pedido.countDocuments({ estado: "pendiente" }),
+            Pedido.countDocuments({ estado: "asignado" }),
+            Pedido.countDocuments({ repartidor: { $exists: false } })
+        ]);
+
+        res.render("dashboard", {
+            user: req.user,
+            metrics: {
+                totalUsuarios,
+                totalRepartidores,
+                totalPedidos,
+                pedidosPendientes,
+                pedidosAsignados,
+                pedidosSinAsignar
+            }
+        });
+    } catch (err) {
+        console.error("Error obteniendo métricas del dashboard:", err);
+        res.status(500).send("Error cargando dashboard");
+    }
+});
 
 
 
