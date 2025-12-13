@@ -63,6 +63,9 @@ app.use("/repartidores", repartidorRoutes);
 app.use("/pedidos", pedidoRoutes);
 app.use("/asignacion", asignacionRoutes);
 app.use("/zonas", zonasRoutes);
+// Reportes
+import reportesRoutes from "./src/routes/reportesroutes.js";
+app.use("/reportes", reportesRoutes);
 
 // Dashboard con métricas
 app.get("/dashboard", isAuthenticated, async (req, res) => {

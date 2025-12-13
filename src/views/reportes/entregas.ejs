@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reportes de Entregas | SGER</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        body {
+            margin: 0;
+            font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
+            background: #f6f7fb;
+        }
+
+        .layout {
+            display: grid;
+            grid-template-columns: 240px 1fr;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            background: #1f2937;
+            color: #fff;
+            padding: 16px;
+        }
+
+        .sidebar h2 {
+            font-size: 18px;
+            margin: 0 0 16px;
+        }
+
+        .sidebar a {
+            display: block;
+            color: #cbd5e1;
+            text-decoration: none;
+            padding: 10px 12px;
+            border-radius: 8px;
+            margin-bottom: 6px;
+        }
+
+        .sidebar a:hover {
+            background: #374151;
+            color: #fff;
+        }
+
+        .content {
+            padding: 24px;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .topbar .title {
+            font-size: 22px;
+            font-weight: 600;
+            color: #111827;
+        }
+
+        .center-wrap {
+            display: flex;
+            justify-content: center;
+        }
+
+        .card {
+            background: #fff;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
+            width: 100%;
+            max-width: 760px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .form-grid .field {
+            max-width: 300px;
+        }
+
+        .field {
+            margin-bottom: 14px;
+        }
+
+        label {
+            color: #374151;
+            font-size: 14px;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 8px;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 16px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 14px;
+            border-radius: 10px;
+            text-decoration: none;
+            border: 1px solid #e5e7eb;
+            background: #fff;
+            color: #111827;
+        }
+
+        .btn-primary {
+            background: #2563eb;
+            border-color: #2563eb;
+            color: #fff;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: #f3f4f6;
+        }
+
+        th,
+        td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #e5e7eb;
+            text-align: left;
+        }
+
+        tr:hover {
+            background: #f9fafb;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border: 1px solid #e5e7eb;
+            border-radius: 999px;
+            background: #fff;
+            font-size: 12px;
+            color: #374151;
+            margin-right: 6px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="layout">
+        <aside class="sidebar">
+            <h2>Menú</h2>
+            <a href="/dashboard">Dashboard</a>
+            <a href="/usuarios">Usuarios</a>
+            <a href="/repartidores">Repartidores</a>
+            <a href="/pedidos">Pedidos</a>
+            <a href="/zonas">Zonas</a>
+            <a href="/asignacion">Asignación</a>
+            <a href="/auth/perfil">Perfil</a>
+            <a href="/auth/logout">Salir</a>
+        </aside>
+        <main class="content">
+            <div class="topbar">
+                <div class="title">Reporte de entregas</div>
+                <div><a class="btn" href="/pedidos">Volver</a></div>
+            </div>
+
+            <div class="center-wrap">
+                <div class="card">
+                    <form method="get" action="/reportes/entregas">
+                        <div class="grid form-grid">
+                            <div class="field">
+                                <label>Zona</label>
+                                <select name="zona">
+                                    <option value="todas" <%=filtros.zona==="todas" ?"selected":"" %>>Todas</option>
+                                    <% zonas.forEach(z=> { %>
+                                        <option value="<%= z.nombre %>" <%=filtros.zona===z.nombre?"selected":"" %>><%=
+                                                z.nombre %>
+                                        </option>
+                                        <% }) %>
+                                </select>
+                            </div>
+                            <div class="field">
+                                <label>Repartidor</label>
+                                <select name="repartidor_id">
+                                    <option value="">Todos</option>
+                                    <% repartidores.forEach(r=> { %>
+                                        <option value="<%= r._id %>"
+                                            <%=filtros.repartidor_id===String(r._id)?"selected":"" %>><%=
+                                                r.usuario_id?.nombre || "Sin nombre" %>
+                                        </option>
+                                        <% }) %>
+                                </select>
+                            </div>
+                            <div class="field">
+                                <label>Desde</label>
+                                <input type="date" name="desde" value="<%= filtros.desde || "" %>">
+                            </div>
+                            <div class="field">
+                                <label>Hasta</label>
+                                <input type="date" name="hasta" value="<%= filtros.hasta || "" %>">
+                            </div>
+                        </div>
+                        <div class="actions">
+                            <button class="btn btn-primary" type="submit">Filtrar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="center-wrap" style="margin-top:12px;">
+                <div class="card">
+                    <div class="grid">
+                        <div><strong>Total entregas:</strong>
+                            <%= metrics.totalEntregas %>
+                        </div>
+                        <div>
+                            <strong>Por zona:</strong>
+                            <% Object.entries(metrics.porZona).forEach(([zn, cnt])=> { %>
+                                <span class="badge">
+                                    <%= zn %>: <%= cnt %>
+                                </span>
+                                <% }) %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="center-wrap" style="margin-top:12px;">
+                <div class="card">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Cliente</th>
+                                <th>Zona</th>
+                                <th>Repartidor</th>
+                                <th>Fecha entrega</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% resultados.forEach(p=> { %>
+                                <tr>
+                                    <td>
+                                        <%= p.cliente?.nombre || "-" %>
+                                    </td>
+                                    <td>
+                                        <%= p.__zona %>
+                                    </td>
+                                    <td>
+                                        <%= p.repartidor_nombre || p.repartidor_id || "-" %>
+                                    </td>
+                                    <td>
+                                        <%= p.fecha_entrega ? new Date(p.fecha_entrega).toLocaleString() : "-" %>
+                                    </td>
+                                    <td>$<%= Number(p.total||0).toFixed(2) %>
+                                    </td>
+                                </tr>
+                                <% }) %>
+                                    <% if (!resultados.length) { %>
+                                        <tr>
+                                            <td colspan="5">Sin resultados</td>
+                                        </tr>
+                                        <% } %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+
+</html>
