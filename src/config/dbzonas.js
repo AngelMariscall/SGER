@@ -11,8 +11,10 @@ export const connectZonaDB = async (zona) => {
             return conexiones[zona];
         }
 
-        // Construimos la URL según la zona (de tu .env)
-        const mongoUri = process.env[`MONGO_URI_${zona.toUpperCase()}`];
+        // Construimos la clave de env de forma robusta (espacios/guiones a _)
+        const normalized = String(zona).toUpperCase().replace(/[^A-Z0-9]/g, "_");
+        const envKey = `MONGO_URI_${normalized}`;
+        const mongoUri = process.env[envKey];
         if (!mongoUri) throw new Error(`No existe URI para la zona: ${zona}`);
 
         // Conectamos

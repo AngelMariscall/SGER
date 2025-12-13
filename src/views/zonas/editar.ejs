@@ -8,14 +8,20 @@
   <style>
     body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif; background: #f6f7fb; }
     .layout { display: grid; grid-template-columns: 240px 1fr; min-height: 100vh; }
-    .sidebar { background: #1f2937; color: #fff; padding: 16px; }
+  .sidebar { background: #1f2937; color: #fff; padding: 16px; }
+  .sidebar h2 { font-size: 18px; margin: 0 0 16px; }
+  .sidebar a { display: block; color: #cbd5e1; text-decoration: none; padding: 10px 12px; border-radius: 8px; margin-bottom: 6px; }
     .content { padding: 24px; }
     .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
     .topbar .title { font-size: 22px; font-weight: 600; color: #111827; }
-    .card { background: #fff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 16px; box-shadow: 0 1px 2px rgba(0,0,0,0.04); }
+  .center-wrap { display:flex; justify-content:center; }
+  .card { background: #fff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 24px; box-shadow: 0 2px 4px rgba(0,0,0,0.06); width:100%; max-width:760px; }
     .field { margin-bottom: 14px; }
     label { color: #374151; font-size: 14px; }
-    input, textarea { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #e5e7eb; }
+  input, textarea { width: 100%; padding: 8px; border-radius: 8px; border: 1px solid #e5e7eb; }
+  .grid { display:grid; grid-template-columns: 1fr 1fr; gap:12px; }
+  .form-grid .field { max-width:300px; }
+  .actions { display:flex; gap:10px; justify-content:flex-end; margin-top:16px; }
     .btn { display: inline-block; padding: 10px 14px; border-radius: 10px; text-decoration: none; border: 1px solid #e5e7eb; background: #fff; color: #111827; }
     .btn-primary { background: #2563eb; border-color: #2563eb; color: #fff; }
     .inline { display: grid; grid-template-columns: 1fr auto; gap: 10px; }
@@ -40,8 +46,10 @@
         <div class="title">Editar Zona</div>
         <div><a class="btn" href="/zonas">Cancelar</a></div>
       </div>
-      <div class="card">
+      <div class="center-wrap">
+        <div class="card">
         <form action="/zonas/<%= zona._id %>/editar" method="POST">
+          <div class="grid form-grid">
           <div class="field">
             <label for="nombre">Nombre</label>
             <input type="text" id="nombre" name="nombre" value="<%= zona.nombre %>" required />
@@ -67,8 +75,12 @@
             <input type="checkbox" id="activa" name="activa" <%= zona.activa ? 'checked' : '' %> />
             <label for="activa">Activa</label>
           </div>
-          <button type="submit" class="btn btn-primary">Guardar cambios</button>
+          </div>
+          <div class="actions">
+            <button type="submit" class="btn btn-primary">Guardar cambios</button>
+          </div>
         </form>
+      </div>
       </div>
     </main>
   </div>

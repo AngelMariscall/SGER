@@ -15,12 +15,14 @@
         .content { padding:24px; }
         .topbar { display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; }
         .topbar .title { font-size:22px; font-weight:600; }
-        .form-wrap { max-width:720px; margin:0 auto; padding:0 12px; }
-        .card { background:#fff; border:1px solid #e5e7eb; border-radius:12px; padding:20px; box-shadow:0 2px 6px rgba(0,0,0,0.06); width:100%; }
+    .center-wrap { display:flex; justify-content:center; }
+    .card { background:#fff; border:1px solid #e5e7eb; border-radius:12px; padding:24px; box-shadow:0 2px 4px rgba(0,0,0,0.06); width:100%; max-width:760px; }
         .field { margin-bottom:16px; }
         label { display:block; margin-bottom:6px; color:#374151; font-size:14px; font-weight:500; }
-        input, select { width:100%; padding:10px 12px; border-radius:8px; border:1px solid #e5e7eb; background:#fff; max-width:100%; }
-        .actions { display:flex; gap:10px; }
+    input, select { width:100%; padding:8px; border-radius:8px; border:1px solid #e5e7eb; background:#fff; max-width:100%; }
+    .grid { display:grid; grid-template-columns: 1fr 1fr; gap:12px; }
+    .form-grid .field { max-width:300px; }
+    .actions { display:flex; gap:10px; justify-content:flex-end; margin-top:16px; }
         .btn { display:inline-flex; align-items:center; justify-content:center; padding:10px 14px; border-radius:10px; text-decoration:none; border:1px solid #e5e7eb; background:#fff; color:#111827; cursor:pointer; }
         .btn-primary { background:#2563eb; border-color:#2563eb; color:#fff; }
     </style>
@@ -43,9 +45,10 @@
             <div class="title">Nuevo Repartidor</div>
             <div class="actions"><a class="btn" href="/repartidores">Volver</a></div>
         </div>
-        <div class="form-wrap">
+        <div class="center-wrap">
             <div class="card">
                 <form action="/repartidores/nuevo" method="POST">
+                    <div class="grid form-grid">
                     <div class="field">
                         <label for="usuario_id">Usuario</label>
                         <select id="usuario_id" name="usuario_id" required>
@@ -81,6 +84,7 @@
                     <div class="field">
                         <label for="entregas_realizadas">Entregas realizadas</label>
                         <input type="number" id="entregas_realizadas" name="entregas_realizadas" value="0" min="0" />
+                    </div>
                     </div>
                     <div class="actions">
                         <button type="submit" class="btn btn-primary">Crear Repartidor</button>

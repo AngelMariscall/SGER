@@ -61,13 +61,17 @@
             color: #111827;
         }
 
+        .center-wrap { display: flex; justify-content: center; }
         .card {
             background: #fff;
             border: 1px solid #e5e7eb;
             border-radius: 12px;
-            padding: 16px;
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+            padding: 24px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
+            width: 100%;
+            max-width: 760px;
         }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 
         .field {
             margin-bottom: 14px;
@@ -81,10 +85,12 @@
         input,
         select {
             width: 100%;
-            padding: 10px;
+            padding: 8px;
             border-radius: 8px;
             border: 1px solid #e5e7eb;
         }
+        .form-grid .field { max-width: 300px; }
+        .actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 16px; }
 
         .btn {
             display: inline-block;
@@ -123,39 +129,45 @@
                 <div class="title">Nuevo Usuario</div>
                 <div><a class="btn" href="/usuarios">Volver</a></div>
             </div>
-            <div class="card">
-                <form action="/usuarios/nuevo" method="POST">
-                    <div class="field">
+            <div class="center-wrap">
+                <div class="card">
+                    <form action="/usuarios/nuevo" method="POST">
+                        <div class="grid form-grid">
+                            <div class="field">
                         <label for="nombre">Nombre</label>
                         <input type="text" id="nombre" name="nombre" required>
-                    </div>
-                    <div class="field">
+                            </div>
+                            <div class="field">
                         <label for="correo">Correo</label>
                         <input type="email" id="correo" name="correo" required>
-                    </div>
-                    <div class="field">
+                            </div>
+                            <div class="field">
                         <label for="rol">Rol</label>
                         <select id="rol" name="rol">
                             <option value="admin">Admin</option>
                             <option value="operador">Operador</option>
                             <option value="repartidor">Repartidor</option>
                         </select>
-                    </div>
-                    <div class="field">
+                            </div>
+                            <div class="field">
                         <label for="telefono">Teléfono</label>
                         <input type="text" id="telefono" name="telefono">
-                    </div>
-                    <div class="field" style="display:flex; align-items:center; gap:8px;">
+                            </div>
+                            <div class="field" style="display:flex; align-items:center; gap:8px;">
                         <input type="checkbox" id="activo" name="activo" checked>
                         <label for="activo">Activo</label>
-                    </div>
+                            </div>
+                        </div>
                     <!-- Opcional: solo si se desea registrar manualmente oauth_id -->
                     <div class="field">
                         <label for="oauth_id">OAuth ID (opcional)</label>
                         <input type="text" id="oauth_id" name="oauth_id" placeholder="p.ej. google-123456">
                     </div>
-                    <button type="submit" class="btn btn-primary">Guardar</button>
-                </form>
+                    <div class="actions">
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </div>
+                    </form>
+                </div>
             </div>
         </main>
     </div>

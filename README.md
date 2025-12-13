@@ -39,33 +39,3 @@ Instalación
         CALLBACK_URL=http://localhost:3000/auth/google/callback
         MONGO_URI=mongodb://localhost:27017/(nombre de la base de datos)
         PORT=3000
-
-
-Estructura del proyecto
-/SGER
-│
-├── package.json
-├── package-look.json
-├── .env                          ← archivo .env que deven crear y configurar con su ID de google
-├── server.js                     ← entrypoint del servidor
-├── .gitignore
-│
-├── /src
-│   ├── /config
-│   ├── /models
-│   ├── /middlewares
-│   ├── /controllers
-│   ├── /routes
-│   ├── /services
-│   ├── /utils
-│   ├── /views                     ← views echos con .ejs
-│   │    ├── /layouts
-│   │    ├── /partials
-│   │    ├── /auth
-│   │    ├── /usuarios
-│   │    ├── /repartidores
-│   │    ├── /pedidos
-│   │    └── /asignacion
-│   └── /public                     ← Archivos estáticos (CSS, JS, imágenes)
-└── /node_modules                  ← generada por npm install
-

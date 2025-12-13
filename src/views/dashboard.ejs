@@ -153,57 +153,30 @@
                         <%= metrics.totalRepartidores %>
                     </div>
                 </div>
-                <div class="card">
-                    <h3>Total de pedidos</h3>
-                    <div class="value">
-                        <%= metrics.totalPedidos %>
-                    </div>
-                </div>
-                <div class="card">
-                    <h3>Pedidos pendientes</h3>
-                    <div class="value">
-                        <%= metrics.pedidosPendientes %>
-                    </div>
-                </div>
-                <div class="card">
-                    <h3>Pedidos asignados</h3>
-                    <div class="value">
-                        <%= metrics.pedidosAsignados %>
-                    </div>
-                </div>
-                <div class="card">
-                    <h3>Pedidos sin asignar</h3>
-                    <div class="value">
-                        <%= metrics.pedidosSinAsignar %>
-                    </div>
-                </div>
             </section>
 
-            <section class="links">
-                <a class="link" href="/usuarios">
-                    <span>Ver lista de usuarios</span>
-                    <span>→</span>
-                </a>
-                <a class="link" href="/usuarios/nuevo">
-                    <span>Crear nuevo usuario</span>
-                    <span>＋</span>
-                </a>
-                <a class="link" href="/repartidores">
-                    <span>Ver repartidores</span>
-                    <span>→</span>
-                </a>
-                <a class="link" href="/pedidos">
-                    <span>Ver pedidos</span>
-                    <span>→</span>
-                </a>
-                <a class="link" href="/pedidos/nuevo">
-                    <span>Nuevo pedido</span>
-                    <span>＋</span>
-                </a>
-                <a class="link" href="/asignacion">
-                    <span>Asignar pedidos</span>
-                    <span>→</span>
-                </a>
+            <section class="cards" style="margin-top:16px;">
+                <% // Support metrics.pedidosPorZona as array of { nombre/codigo, count } or object map const
+                    zonasArray=Array.isArray(metrics.pedidosPorZona) ? metrics.pedidosPorZona : (metrics.pedidosPorZona
+                    ? Object.entries(metrics.pedidosPorZona).map(([k,v])=>({ nombre:k, count:v })) : []);
+                    %>
+                    <% if (zonasArray.length) { %>
+                        <% zonasArray.forEach(z=> { const label = z.nombre || z.codigo || 'Zona'; %>
+                            <div class="card">
+                                <h3>Pedidos en <%= label %>
+                                </h3>
+                                <div class="value">
+                                    <%= z.count || 0 %>
+                                </div>
+                            </div>
+                            <% }) %>
+                                <% } else { %>
+                                    <div class="card">
+                                        <h3>Pedidos por zona</h3>
+                                        <div class="value" style="font-size:16px; font-weight:500; color:#6b7280;">Sin
+                                            datos de zonas</div>
+                                    </div>
+                                    <% } %>
             </section>
         </main>
     </div>

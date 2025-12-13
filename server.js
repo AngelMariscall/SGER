@@ -15,6 +15,8 @@ import { fileURLToPath } from 'url';
 import Usuario from "./src/models/usuario.js";
 import Pedido from "./src/models/pedido.js";
 import Repartidor from "./src/models/repartidor.js";
+import Zona from "./src/models/zona.js";
+import { connectZonaDB } from "./src/config/dbzonas.js";
 import { isAuthenticated } from "./src/middlewares/auth.js";
 
 
@@ -74,6 +76,22 @@ app.get("/dashboard", isAuthenticated, async (req, res) => {
             Pedido.countDocuments({ repartidor: { $exists: false } })
         ]);
 
+        // Pedidos por zona: contar en cada base de datos de zona
+        const zonas = await Zona.find({ activa: true }).sort({ nombre: 1 });
+        const pedidosPorZona = [];
+        for (const z of zonas) {
+            try {
+                // Usa nombre de zona para coincidir con variables .env si están nombradas por nombre
+                const dbZona = await connectZonaDB(z.nombre);
+                const PedidoZona = dbZona.model("Pedido", Pedido.schema);
+                const count = await PedidoZona.countDocuments({});
+                pedidosPorZona.push({ nombre: z.nombre, codigo: z.codigo, count });
+            } catch (e) {
+                console.error(`No se pudo contar pedidos para zona ${z.codigo}:`, e.message);
+                pedidosPorZona.push({ nombre: z.nombre, codigo: z.codigo, count: 0 });
+            }
+        }
+
         res.render("dashboard", {
             user: req.user,
             metrics: {
@@ -82,7 +100,8 @@ app.get("/dashboard", isAuthenticated, async (req, res) => {
                 totalPedidos,
                 pedidosPendientes,
                 pedidosAsignados,
-                pedidosSinAsignar
+                pedidosSinAsignar,
+                pedidosPorZona
             }
         });
     } catch (err) {

@@ -37,7 +37,8 @@ export const renderAsignarZonaForm = async (req, res) => {
 export const renderNuevoRepartidor = async (req, res) => {
     try {
         console.log("Render Nuevo Repartidor");
-        const usuarios = await Usuario.find({}, "_id nombre");
+        // Only show users who have rol 'repartidor'
+        const usuarios = await Usuario.find({ rol: "repartidor" }, "_id nombre");
         const zonas = await Zona.find({}, "nombre");
         res.render("repartidores/nuevo", { usuarios, zonas, user: req.user });
     } catch (error) {
@@ -48,6 +49,14 @@ export const renderNuevoRepartidor = async (req, res) => {
 export const crearRepartidor = async (req, res) => {
     try {
         const { usuario_id, vehiculo, placa, zona_asignada, status, entregas_realizadas } = req.body;
+        // Validate that the selected user has rol 'repartidor'
+        const usuario = await Usuario.findById(usuario_id);
+        if (!usuario) {
+            return res.redirect("/repartidores/nuevo?msg=Usuario%20no%20encontrado&type=error");
+        }
+        if (usuario.rol !== "repartidor") {
+            return res.redirect("/repartidores/nuevo?msg=El%20usuario%20no%20tiene%20rol%20repartidor&type=error");
+        }
         await Repartidor.create({ usuario_id, vehiculo, placa, zona_asignada, status, entregas_realizadas });
         res.redirect("/repartidores?msg=Repartidor%20creado&type=success");
     } catch (error) {
@@ -84,6 +93,14 @@ export const actualizarRepartidor = async (req, res) => {
     try {
         const { id } = req.params;
         const { usuario_id, vehiculo, placa, zona_asignada, status, entregas_realizadas } = req.body;
+        // Validate role on update as well
+        const usuario = await Usuario.findById(usuario_id);
+        if (!usuario) {
+            return res.redirect(`/repartidores/${id}/editar?msg=Usuario%20no%20encontrado&type=error`);
+        }
+        if (usuario.rol !== "repartidor") {
+            return res.redirect(`/repartidores/${id}/editar?msg=El%20usuario%20no%20tiene%20rol%20repartidor&type=error`);
+        }
         const rep = await Repartidor.findByIdAndUpdate(id, { usuario_id, vehiculo, placa, zona_asignada, status, entregas_realizadas }, { new: true });
         if (!rep) return res.status(404).send("Repartidor no encontrado");
         res.redirect(`/repartidores/${id}?msg=Actualizado&type=success`);
