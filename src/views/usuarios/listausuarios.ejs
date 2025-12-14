@@ -188,7 +188,7 @@
                                 <th>Correo</th>
                                 <th>Rol</th>
                                 <th>Teléfono</th>
-                                <th>Activo</th>
+                                <!-- columna 'Activo' eliminada -->
                                 <th>Acciones</th>
                             </tr>
                         </thead>
@@ -207,9 +207,7 @@
                                     <td>
                                         <%= u.telefono || '-' %>
                                     </td>
-                                    <td>
-                                        <%= u.activo ? "Sí" : "No" %>
-                                    </td>
+                                    <!-- campo 'Activo' eliminado -->
                                     <td>
                                         <div class="table-actions">
                                             <a class="btn-icon btn-view" href="/usuarios/<%= u._id %>" title="Ver">

@@ -1,98 +1,215 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Nuevo Repartidor | SGER</title>
     <link rel="stylesheet" href="/css/style.css" />
     <style>
-        *, *::before, *::after { box-sizing: border-box; }
-        body { margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif; background:#f6f7fb; color:#111827; }
-        .layout { display:grid; grid-template-columns:240px 1fr; min-height:100vh; }
-        .sidebar { background:#1f2937; color:#fff; padding:16px; }
-        .sidebar a { display:block; color:#cbd5e1; text-decoration:none; padding:10px 12px; border-radius:8px; margin-bottom:6px; }
-        .sidebar a:hover { background:#374151; color:#fff; }
-        .content { padding:24px; }
-        .topbar { display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; }
-        .topbar .title { font-size:22px; font-weight:600; }
-    .center-wrap { display:flex; justify-content:center; }
-    .card { background:#fff; border:1px solid #e5e7eb; border-radius:12px; padding:24px; box-shadow:0 2px 4px rgba(0,0,0,0.06); width:100%; max-width:760px; }
-        .field { margin-bottom:16px; }
-        label { display:block; margin-bottom:6px; color:#374151; font-size:14px; font-weight:500; }
-    input, select { width:100%; padding:8px; border-radius:8px; border:1px solid #e5e7eb; background:#fff; max-width:100%; }
-    .grid { display:grid; grid-template-columns: 1fr 1fr; gap:12px; }
-    .form-grid .field { max-width:300px; }
-    .actions { display:flex; gap:10px; justify-content:flex-end; margin-top:16px; }
-        .btn { display:inline-flex; align-items:center; justify-content:center; padding:10px 14px; border-radius:10px; text-decoration:none; border:1px solid #e5e7eb; background:#fff; color:#111827; cursor:pointer; }
-        .btn-primary { background:#2563eb; border-color:#2563eb; color:#fff; }
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
+            background: #f6f7fb;
+            color: #111827;
+        }
+
+        .layout {
+            display: grid;
+            grid-template-columns: 240px 1fr;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            background: #1f2937;
+            color: #fff;
+            padding: 16px;
+        }
+
+        .sidebar a {
+            display: block;
+            color: #cbd5e1;
+            text-decoration: none;
+            padding: 10px 12px;
+            border-radius: 8px;
+            margin-bottom: 6px;
+        }
+
+        .sidebar a:hover {
+            background: #374151;
+            color: #fff;
+        }
+
+        .content {
+            padding: 24px;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .topbar .title {
+            font-size: 22px;
+            font-weight: 600;
+        }
+
+        .center-wrap {
+            display: flex;
+            justify-content: center;
+        }
+
+        .card {
+            background: #fff;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
+            width: 100%;
+            max-width: 760px;
+        }
+
+        .field {
+            margin-bottom: 16px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            color: #374151;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 8px;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+            background: #fff;
+            max-width: 100%;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .form-grid .field {
+            max-width: 300px;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 16px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 14px;
+            border-radius: 10px;
+            text-decoration: none;
+            border: 1px solid #e5e7eb;
+            background: #fff;
+            color: #111827;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: #2563eb;
+            border-color: #2563eb;
+            color: #fff;
+        }
     </style>
 </head>
+
 <body>
-<div class="layout">
-    <aside class="sidebar">
-        <h2>Menú</h2>
-        <a href="/dashboard">Dashboard</a>
-        <a href="/usuarios">Usuarios</a>
-        <a href="/repartidores">Repartidores</a>
-        <a href="/pedidos">Pedidos</a>
-        <a href="/zonas">Zonas</a>
-        <a href="/asignacion">Asignación</a>
-        <a href="/auth/perfil">Perfil</a>
-        <a href="/auth/logout">Salir</a>
-    </aside>
-    <main class="content">
-        <div class="topbar">
-            <div class="title">Nuevo Repartidor</div>
-            <div class="actions"><a class="btn" href="/repartidores">Volver</a></div>
-        </div>
-        <div class="center-wrap">
-            <div class="card">
-                <form action="/repartidores/nuevo" method="POST">
-                    <div class="grid form-grid">
-                    <div class="field">
-                        <label for="usuario_id">Usuario</label>
-                        <select id="usuario_id" name="usuario_id" required>
-                            <% usuarios.forEach(u => { %>
-                                <option value="<%= u._id %>"><%= u.nombre %></option>
-                            <% }) %>
-                        </select>
-                    </div>
-                    <div class="field">
-                        <label for="vehiculo">Vehículo</label>
-                        <input type="text" id="vehiculo" name="vehiculo" placeholder="Moto, Auto, Bicicleta" required />
-                    </div>
-                    <div class="field">
-                        <label for="placa">Placa</label>
-                        <input type="text" id="placa" name="placa" placeholder="XYZ-1234" required />
-                    </div>
-                    <div class="field">
-                        <label for="zona_asignada">Zona asignada</label>
-                        <select id="zona_asignada" name="zona_asignada" required>
-                            <% zonas.forEach(z => { %>
-                                <option value="<%= z.nombre %>"><%= z.nombre %></option>
-                            <% }) %>
-                        </select>
-                    </div>
-                    <div class="field">
-                        <label for="status">Status</label>
-                        <select id="status" name="status">
-                            <option value="disponible">disponible</option>
-                            <option value="ocupado">ocupado</option>
-                            <option value="fuera de servicio">fuera de servicio</option>
-                        </select>
-                    </div>
-                    <div class="field">
-                        <label for="entregas_realizadas">Entregas realizadas</label>
-                        <input type="number" id="entregas_realizadas" name="entregas_realizadas" value="0" min="0" />
-                    </div>
-                    </div>
-                    <div class="actions">
-                        <button type="submit" class="btn btn-primary">Crear Repartidor</button>
-                    </div>
-                </form>
+    <div class="layout">
+        <aside class="sidebar">
+            <h2>Menú</h2>
+            <a href="/dashboard">Dashboard</a>
+            <a href="/usuarios">Usuarios</a>
+            <a href="/repartidores">Repartidores</a>
+            <a href="/pedidos">Pedidos</a>
+            <a href="/zonas">Zonas</a>
+            <a href="/asignacion">Asignación</a>
+            <a href="/auth/perfil">Perfil</a>
+            <a href="/auth/logout">Salir</a>
+        </aside>
+        <main class="content">
+            <div class="topbar">
+                <div class="title">Nuevo Repartidor</div>
+                <div class="actions"><a class="btn" href="/repartidores">Volver</a></div>
             </div>
-        </div>
-    </main>
-</div>
+            <div class="center-wrap">
+                <div class="card">
+                    <form action="/repartidores/nuevo" method="POST">
+                        <div class="grid form-grid">
+                            <div class="field">
+                                <label for="usuario_id">Usuario</label>
+                                <select id="usuario_id" name="usuario_id" required>
+                                    <% usuarios.forEach(u=> { %>
+                                        <option value="<%= u._id %>">
+                                            <%= u.nombre %>
+                                        </option>
+                                        <% }) %>
+                                </select>
+                            </div>
+                            <div class="field">
+                                <label for="vehiculo">Vehículo</label>
+                                <input type="text" id="vehiculo" name="vehiculo" placeholder="Moto, Auto, Bicicleta"
+                                    required />
+                            </div>
+                            <div class="field">
+                                <label for="placa">Placa</label>
+                                <input type="text" id="placa" name="placa" placeholder="XYZ-1234" required />
+                            </div>
+                            <div class="field">
+                                <label for="zona_asignada">Zona asignada</label>
+                                <select id="zona_asignada" name="zona_asignada" required>
+                                    <% zonas.forEach(z=> { %>
+                                        <option value="<%= z.nombre %>">
+                                            <%= z.nombre %>
+                                        </option>
+                                        <% }) %>
+                                </select>
+                            </div>
+                            <div class="field">
+                                <label for="status">Status</label>
+                                <select id="status" name="status">
+                                    <option value="disponible">disponible</option>
+                                    <option value="ocupado">ocupado</option>
+                                    <option value="fuera de servicio">fuera de servicio</option>
+                                </select>
+                            </div>
+                            <div class="field">
+                                <label for="entregas_realizadas">Entregas realizadas</label>
+                                <input type="number" id="entregas_realizadas" name="entregas_realizadas" value="0"
+                                    min="0" />
+                            </div>
+                        </div>
+                        <div class="actions">
+                            <button type="submit" class="btn btn-primary">Crear Repartidor</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
 </body>
+
 </html>

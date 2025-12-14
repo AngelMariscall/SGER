@@ -112,6 +112,25 @@
         .field {
             margin-bottom: 14px;
         }
+
+        /* Toast styles */
+        .toast {
+            padding: 10px 14px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+        }
+
+        .toast-success {
+            background: #ecfdf5;
+            color: #065f46;
+            border: 1px solid #6ee7b7;
+        }
+
+        .toast-error {
+            background: #fef2f2;
+            color: #7f1d1d;
+            border: 1px solid #fca5a5;
+        }
     </style>
 </head>
 
@@ -138,38 +157,46 @@
                 </div>
             </div>
 
-            <div class="center-wrap">
-                <div class="card">
-                    <form action="/asignacion" method="POST">
-                        <div class="field">
-                            <label for="pedido">Pedido</label>
-                            <select id="pedido" name="pedido_id">
-                                <% pedidos.forEach(p=> { %>
-                                    <option value="<%= p._id %>" data-zona="<%= p.__zona || p.zona %>">
-                                        <%= p.cliente.nombre %> - <%= p.__zona || p.zona %>
-                                    </option>
-                                    <% }) %>
-                            </select>
-                        </div>
-                        <div class="field">
-                            <label for="repartidor">Repartidor</label>
-                            <select id="repartidor" name="repartidor_id">
-                                <% repartidores.forEach(r=> { %>
-                                    <option value="<%= r._id %>" data-zona="<%= r.zona_asignada %>">
-                                        <%= (r.usuario_id && r.usuario_id.nombre) || (r.usuario && r.usuario.nombre) %>
-                                            - <%= r.zona_asignada %>
-                                    </option>
-                                    <% }) %>
-                            </select>
-                        </div>
-                        <div class="actions">
-                            <button type="submit" class="btn btn-primary">Asignar</button>
-                        </div>
-                    </form>
+            <% if (typeof msg !== 'undefined' && msg) { %>
+                <div id="toast" class="toast <%= type === 'success' ? 'toast-success' : 'toast-error' %>">
+                    <%= msg %>
                 </div>
-            </div>
-    </div>
-    </main>
+            <% } %>
+
+                        <div class="center-wrap">
+                            <div class="card">
+                                <form action="/asignacion" method="POST">
+                                    <div class="field">
+                                        <label for="pedido">Pedido</label>
+                                        <select id="pedido" name="pedido_id">
+                                            <option value="" disabled selected>— seleccione pedido —</option>
+                                            <% pedidos.forEach(p=> { %>
+                                                <option value="<%= p._id %>" data-zona="<%= p.__zona || p.zona %>">
+                                                    <%= p.cliente.nombre %> - <%= p.__zona || p.zona %>
+                                                </option>
+                                                <% }) %>
+                                        </select>
+                                    </div>
+                                    <div class="field">
+                                        <label for="repartidor">Repartidor</label>
+                                        <select id="repartidor" name="repartidor_id">
+                                            <option value="" disabled selected>— seleccione repartidor —</option>
+                                            <% repartidores.forEach(r=> { %>
+                                                <option value="<%= r._id %>" data-zona="<%= r.zona_asignada %>">
+                                                    <%= (r.usuario_id && r.usuario_id.nombre) || (r.usuario &&
+                                                        r.usuario.nombre) %>
+                                                        - <%= r.zona_asignada %>
+                                                </option>
+                                                <% }) %>
+                                        </select>
+                                    </div>
+                                    <div class="actions">
+                                        <button type="submit" class="btn btn-primary">Asignar</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+        </main>
     </div>
     <script>
         // Filtrar repartidores por la zona del pedido seleccionado
@@ -199,6 +226,12 @@
             const zona = e.target.options[e.target.selectedIndex].dataset.zona;
             filterRepartidoresByZona(zona);
         });
+
+        // Auto-hide toast after a short delay
+        const toast = document.getElementById('toast');
+        if (toast) {
+            setTimeout(() => { toast.style.display = 'none'; }, 2500);
+        }
     </script>
 </body>
 

@@ -173,10 +173,7 @@
                 <label for="telefono">Teléfono</label>
                 <input type="text" id="telefono" name="telefono" value="<%= usuario.telefono || '' %>" />
               </div>
-              <div class="field">
-                <label class="form-check-label" for="activo">Activo</label>
-                <input type="checkbox" id="activo" name="activo" <%=usuario.activo ? 'checked' : '' %> />
-              </div>
+              <!-- campo 'activo' eliminado -->
               <div class="actions">
                 <button type="submit" class="btn btn-primary">Guardar cambios</button>
               </div>

@@ -1,5 +1,5 @@
+// Cargar variables de entorno una sola vez al inicio del proceso
 import "dotenv/config";
-
 import express from "express";
 import session from "express-session";
 import passport from "./src/config/passport.js";
@@ -18,13 +18,11 @@ import Zona from "./src/models/zona.js";
 import { connectZonaDB } from "./src/config/dbzonas.js";
 import { isAuthenticated } from "./src/middlewares/auth.js";
 
-
-console.log("Prueba dotenv:", process.env.GOOGLE_CLIENT_ID);
-
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-connectDB();
+// Conectar a la BD global antes de inicializar rutas
+await connectDB();
 
 const app = express();
 
@@ -35,9 +33,14 @@ app.use(express.static(path.join(__dirname, 'src/public')));
 // Configuración de sesiones
 app.use(
     session({
-        secret: "ProyectoEscolar",  // En producción poner una más segura
+        secret: process.env.SESSION_SECRET || "ProyectoEscolar",
         resave: false,
-        saveUninitialized: false
+        saveUninitialized: false,
+        cookie: {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "lax",
+        },
     })
 );
 

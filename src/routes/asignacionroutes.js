@@ -27,7 +27,8 @@ router.get("/", isAuthenticated, async (req, res) => {
         // Repartidores desde la DB global con nombre del usuario
         const repartidores = await Repartidor.find().populate("usuario_id");
 
-        res.render("asignacion/asignar", { pedidos, repartidores, user: req.user });
+        const { type = null, msg = null } = req.query;
+        res.render("asignacion/asignar", { pedidos, repartidores, user: req.user, type, msg });
     } catch (error) {
         res.status(500).send(error.message);
     }
